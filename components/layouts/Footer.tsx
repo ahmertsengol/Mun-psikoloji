@@ -107,6 +107,19 @@ export function Footer() {
             <span className="font-semibold text-[var(--color-fg)]">Munzur Psikoloji Kulübü</span>{" "}
             Topluluk Sitesi. Tüm hakları saklıdır.
           </p>
+          
+          {/* Developer Credit */}
+          <p className="text-center text-xs text-[var(--color-fg)]/40 mt-3">
+            Designed & Developed by{" "}
+            <a
+              href="https://www.ahmertsengol.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-[var(--color-fg)]/50 hover:text-[var(--color-accent)] transition-colors duration-200"
+            >
+              Ahmet Mert Şengöl
+            </a>
+          </p>
         </div>
       </div>
     </footer>
