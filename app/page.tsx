@@ -29,14 +29,14 @@ export default async function Home({ searchParams }: PageProps) {
   const params = await searchParams;
   const currentPage = Number(params.page) || 1;
 
-  // Fetch announcements (latest 5)
+  // Fetch announcements (latest 3)
   const announcements = await prisma.post.findMany({
     where: {
       type: "ANNOUNCEMENT",
       status: "PUBLISHED",
     },
     orderBy: { publishedAt: "desc" },
-    take: 5,
+    take: 3,
     select: {
       id: true,
       title: true,
@@ -47,14 +47,14 @@ export default async function Home({ searchParams }: PageProps) {
     },
   });
 
-  // Fetch news (latest 5)
+  // Fetch news (latest 3)
   const news = await prisma.post.findMany({
     where: {
       type: "NEWS",
       status: "PUBLISHED",
     },
     orderBy: { publishedAt: "desc" },
-    take: 5,
+    take: 3,
     select: {
       id: true,
       title: true,

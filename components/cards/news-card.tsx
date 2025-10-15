@@ -41,7 +41,9 @@ export function NewsCard({
                   src={coverImage}
                   alt={title}
                   fill
+                  sizes="56px"
                   className="object-cover group-hover:scale-110 transition-transform duration-300"
+                  loading="lazy"
                 />
               </div>
             </div>

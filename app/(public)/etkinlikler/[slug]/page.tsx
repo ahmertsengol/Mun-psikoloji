@@ -101,8 +101,8 @@ export default async function EventPage({ params }: PageProps) {
               src={event.coverImage}
               alt={event.title}
               fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
               className="object-cover"
-              priority
             />
           </div>
         )}
