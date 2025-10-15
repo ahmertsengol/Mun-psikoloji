@@ -53,7 +53,7 @@ export async function deleteImage(url: string): Promise<void> {
 
   // Extract file path from URL
   const urlParts = url.split(`/${BUCKET_NAME}/`);
-  if (urlParts.length < 2) {
+  if (urlParts.length < 2 || !urlParts[1]) {
     throw new Error('Geçersiz dosya URL');
   }
 
