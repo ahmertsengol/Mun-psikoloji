@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Megaphone, Bell } from "lucide-react";
+import { Bell } from "lucide-react";
 import { Badge } from "../ui/Badge";
 import { formatDateBadge, formatDateFull } from "@/lib/date";
 import { cn } from "@/lib/utils";
@@ -33,23 +33,17 @@ export function AnnouncementCard({
           className
         )}
       >
-        {/* Cover image or placeholder */}
-        <div className="h-48 relative overflow-hidden">
-          {coverImage ? (
+        {/* Cover image - only show if exists */}
+        {coverImage && (
+          <div className="h-32 relative overflow-hidden">
             <Image
               src={coverImage}
               alt={title}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
-          ) : (
-            <div className="h-full bg-gradient-to-br from-[var(--color-accent2)]/20 to-[var(--color-accent)]/20">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Megaphone className="h-16 w-16 text-[var(--color-accent2)]/40" />
-              </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="p-5">
           {/* Date Badge with Icon */}
