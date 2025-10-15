@@ -11,6 +11,9 @@ export const metadata = {
   description: "Kulüp duyuruları ve güncellemeler",
 };
 
+// Aggressive caching: Revalidate every 5 minutes (300 seconds)
+export const revalidate = 300;
+
 export default async function AnnouncementsPage() {
   // Fetch all published announcements
   const announcements = await prisma.post.findMany({
