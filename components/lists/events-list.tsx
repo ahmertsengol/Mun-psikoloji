@@ -14,6 +14,7 @@ interface Event {
   startsAt: string;
   endsAt?: string | null;
   location?: string | null;
+  coverImage?: string | null; // Kapak görseli eklendi
 }
 
 interface EventsListProps {

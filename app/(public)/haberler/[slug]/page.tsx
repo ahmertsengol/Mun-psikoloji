@@ -73,12 +73,6 @@ export default async function PostPage({ params }: PageProps) {
                 </time>
               </div>
             )}
-            {post.author && (
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4 text-[var(--color-accent)]" />
-                <span>{post.author.email}</span>
-              </div>
-            )}
           </div>
         </header>
 

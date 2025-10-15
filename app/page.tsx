@@ -81,6 +81,7 @@ export default async function Home({ searchParams }: PageProps) {
       startsAt: true,
       endsAt: true,
       location: true,
+      coverImage: true, // Kapak görseli eklendi
     },
   });
 

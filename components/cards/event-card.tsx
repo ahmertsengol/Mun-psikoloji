@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Calendar, MapPin } from "lucide-react";
 import { Badge } from "../ui/Badge";
 import { formatDateBadge, formatDateFull } from "@/lib/date";
@@ -12,6 +13,7 @@ interface EventCardProps {
   startsAt: string;
   endsAt?: string | null;
   location?: string | null;
+  coverImage?: string | null; // Kapak görseli eklendi
   className?: string;
 }
 
@@ -22,6 +24,7 @@ export function EventCard({
   startsAt,
   endsAt,
   location,
+  coverImage, // Kapak görseli eklendi
   className,
 }: EventCardProps) {
   return (
@@ -34,11 +37,22 @@ export function EventCard({
           className
         )}
       >
-        {/* Optional cover image placeholder */}
-        <div className="h-48 bg-gradient-to-br from-[var(--color-accent)]/20 to-[var(--color-accent2)]/20 relative">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <Calendar className="h-16 w-16 text-[var(--color-accent)]/40" />
-          </div>
+        {/* Cover image or placeholder */}
+        <div className="h-48 relative overflow-hidden">
+          {coverImage ? (
+            <Image
+              src={coverImage}
+              alt={title}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
+            <div className="h-full bg-gradient-to-br from-[var(--color-accent)]/20 to-[var(--color-accent2)]/20">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Calendar className="h-16 w-16 text-[var(--color-accent)]/40" />
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="p-5">
