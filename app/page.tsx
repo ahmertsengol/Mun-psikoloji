@@ -1,26 +1,42 @@
 /**
- * Home Page - Landing page
+ * Home Page - 3 Column Layout
+ * Left: Announcements | Center: Events (paginated) | Right: News
  */
 
-import Link from 'next/link';
-import { prisma } from '@/lib/db/prisma';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
-import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { prisma } from "@/lib/db/prisma";
+import { Header } from "@/components/layouts/Header";
+import { Footer } from "@/components/layouts/Footer";
+import { EventsList } from "@/components/lists/events-list";
+import { AnnouncementsList } from "@/components/lists/announcements-list";
+import { NewsList } from "@/components/lists/news-list";
+import { Separator } from "@/components/ui/Separator";
 
 export const metadata = {
-  title: 'Anasayfa | Munzur Psikoloji Kulübü',
+  title: "Anasayfa | Munzur Psikoloji Kulübü",
   description:
-    'Munzur Üniversitesi Psikoloji Kulübü topluluk sitesi. Haberler, etkinlikler ve daha fazlası.',
+    "Munzur Üniversitesi Psikoloji Kulübü topluluk sitesi. Haberler, etkinlikler ve duyurular.",
 };
 
-export default async function Home() {
-  // Fetch latest published posts
-  const latestPosts = await prisma.post.findMany({
-    where: { status: 'PUBLISHED' },
-    orderBy: { publishedAt: 'desc' },
-    take: 3,
+const EVENTS_PER_PAGE = 4;
+
+interface PageProps {
+  searchParams: Promise<{
+    page?: string;
+  }>;
+}
+
+export default async function Home({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const currentPage = Number(params.page) || 1;
+
+  // Fetch announcements (latest 5)
+  const announcements = await prisma.post.findMany({
+    where: {
+      type: "ANNOUNCEMENT",
+      status: "PUBLISHED",
+    },
+    orderBy: { publishedAt: "desc" },
+    take: 5,
     select: {
       id: true,
       title: true,
@@ -30,184 +46,114 @@ export default async function Home() {
     },
   });
 
-  // Fetch upcoming events
-  const upcomingEvents = await prisma.event.findMany({
+  // Fetch news (latest 5)
+  const news = await prisma.post.findMany({
     where: {
-      status: 'PUBLISHED',
-      startsAt: { gte: new Date() },
+      type: "NEWS",
+      status: "PUBLISHED",
     },
-    orderBy: { startsAt: 'asc' },
-    take: 3,
+    orderBy: { publishedAt: "desc" },
+    take: 5,
     select: {
       id: true,
       title: true,
       slug: true,
+      excerpt: true,
+      publishedAt: true,
+    },
+  });
+
+  // Fetch events with pagination
+  const totalEvents = await prisma.event.count({
+    where: { status: "PUBLISHED" },
+  });
+
+  const events = await prisma.event.findMany({
+    where: { status: "PUBLISHED" },
+    orderBy: { startsAt: "desc" },
+    skip: (currentPage - 1) * EVENTS_PER_PAGE,
+    take: EVENTS_PER_PAGE,
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      description: true,
       startsAt: true,
+      endsAt: true,
       location: true,
     },
   });
 
+  const totalPages = Math.ceil(totalEvents / EVENTS_PER_PAGE);
+
+  // Format data for components
+  const formattedEvents = events.map((event: typeof events[number]) => ({
+    ...event,
+    startsAt: event.startsAt.toISOString(),
+    endsAt: event.endsAt?.toISOString() || null,
+  }));
+
+  const formattedAnnouncements = announcements.map((announcement: typeof announcements[number]) => ({
+    ...announcement,
+    publishedAt: announcement.publishedAt?.toISOString() || "",
+  }));
+
+  const formattedNews = news.map((item: typeof news[number]) => ({
+    ...item,
+    publishedAt: item.publishedAt?.toISOString() || "",
+  }));
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 px-4 py-20 text-white">
-        <div className="absolute inset-0 bg-black/10"></div>
-        <div className="container relative z-10 mx-auto">
-          {/* Warning Banner */}
-          <div className="mb-8 rounded-xl border-2 border-white/30 bg-white/20 p-4 backdrop-blur-sm">
-            <p className="text-center text-sm font-medium text-white">
-              ⚠️ Bu site resmi değildir; Munzur Üniversitesi Psikoloji Kulübü topluluk sayfasıdır.
-              Resmi duyurular için{' '}
-              <a
-                href="https://munzur.edu.tr"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-bold underline hover:text-yellow-300"
-              >
-                munzur.edu.tr
-              </a>
-              'yi takip ediniz.
-            </p>
-          </div>
+    <div className="min-h-screen flex flex-col">
+      <Header />
 
-          <div className="text-center">
-            <h1 className="mb-6 text-5xl font-extrabold leading-tight md:text-6xl lg:text-7xl">
-              Munzur Üniversitesi
-              <br />
-              <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
-                Psikoloji Kulübü
-              </span>
-            </h1>
-            <p className="mx-auto mb-10 max-w-3xl text-xl text-white/90 md:text-2xl">
-              🧠 Psikoloji öğrencileri ve meraklıları için topluluk platformu.
-              Haberler, etkinlikler ve bilgi paylaşımı.
-            </p>
-            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link href="/haberler">
-                <Button size="lg" className="bg-white text-purple-700 hover:bg-gray-100 font-semibold shadow-lg">
-                  📰 Haberleri İncele
-                </Button>
-              </Link>
-              <Link href="/etkinlikler">
-                <Button variant="secondary" size="lg" className="bg-transparent border-2 border-white text-white hover:bg-white/10 font-semibold">
-                  📅 Etkinlikleri Gör
-                </Button>
-              </Link>
+      <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* 3 Column Grid Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+          {/* LEFT COLUMN - Announcements (3 cols on lg) */}
+          <aside className="lg:col-span-3 order-2 lg:order-1">
+            <div className="sticky top-20">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-[var(--color-fg)]">Duyurular</h2>
+              </div>
+              <Separator className="mb-4" />
+              <AnnouncementsList
+                announcements={formattedAnnouncements}
+                showViewAll={announcements.length >= 5}
+              />
             </div>
-          </div>
-        </div>
-      </section>
+          </aside>
 
-      <div className="container mx-auto px-4 py-16">
-        {/* Latest Posts */}
-        <section className="mb-20">
-          <div className="mb-10 text-center">
-            <h2 className="mb-3 text-4xl font-bold text-gray-900">📰 Son Haberler</h2>
-            <p className="text-lg text-gray-600">Psikoloji kulübünden güncel haberler</p>
-          </div>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {latestPosts.length > 0 ? (
-            latestPosts.map((post) => (
-              <Card key={post.id} className="transition-all hover:shadow-xl hover:-translate-y-1">
-                <CardHeader>
-                  <CardTitle>
-                    <Link
-                      href={`/haberler/${post.slug}`}
-                      className="text-gray-900 hover:text-purple-600 transition-colors"
-                    >
-                      {post.title}
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="mb-4 text-sm text-gray-600 line-clamp-3">
-                    {post.excerpt || 'Haber içeriğini görmek için tıklayın...'}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs text-gray-500">
-                      {post.publishedAt
-                        ? format(new Date(post.publishedAt), 'dd MMMM yyyy', {
-                            locale: tr,
-                          })
-                        : ''}
-                    </p>
-                    <Link href={`/haberler/${post.slug}`}>
-                      <Button variant="ghost" size="sm">Okuyun →</Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-          ) : (
-            <div className="col-span-full text-center py-12">
-              <p className="text-gray-500 text-lg mb-4">📭 Henüz haber bulunmuyor.</p>
-              <p className="text-sm text-gray-400">Yakında yeni içerikler paylaşılacak!</p>
+          {/* CENTER COLUMN - Events (6 cols on lg, MAIN FOCUS) */}
+          <section className="lg:col-span-6 order-1 lg:order-2">
+            <div className="mb-6">
+              <h1 className="text-3xl font-bold text-[var(--color-fg)] mb-2">Etkinlikler</h1>
+              <p className="text-[var(--color-fg)]/70">
+                Kulüp etkinliklerimizi keşfedin ve katılın
+              </p>
             </div>
-          )}
-        </div>
-      </section>
+            <Separator className="mb-6" />
+            <EventsList
+              events={formattedEvents}
+              totalPages={totalPages}
+              currentPage={currentPage}
+            />
+          </section>
 
-      {/* Upcoming Events */}
-      <section>
-        <div className="mb-10 text-center">
-          <h2 className="mb-3 text-4xl font-bold text-gray-900">📅 Yaklaşan Etkinlikler</h2>
-          <p className="text-lg text-gray-600">Kulüp etkinliklerine katılın, yeni insanlarla tanışın</p>
-        </div>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {upcomingEvents.length > 0 ? (
-            upcomingEvents.map((event) => (
-              <Card key={event.id} className="transition-all hover:shadow-xl hover:-translate-y-1 border-l-4 border-l-purple-500">
-                <CardHeader>
-                  <CardTitle>
-                    <Link
-                      href={`/etkinlikler/${event.slug}`}
-                      className="text-gray-900 hover:text-purple-600 transition-colors"
-                    >
-                      {event.title}
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-start gap-2">
-                      <span className="text-purple-600 mt-0.5">🕐</span>
-                      <p className="text-sm text-gray-700 font-medium">
-                        {format(new Date(event.startsAt), 'dd MMMM yyyy, HH:mm', {
-                          locale: tr,
-                        })}
-                      </p>
-                    </div>
-                    {event.location && (
-                      <div className="flex items-start gap-2">
-                        <span className="text-purple-600 mt-0.5">📍</span>
-                        <p className="text-sm text-gray-600">{event.location}</p>
-                      </div>
-                    )}
-                    <Link href={`/etkinlikler/${event.slug}`}>
-                      <Button variant="ghost" size="sm" className="mt-2 w-full">
-                        Detayları Gör →
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-          ) : (
-            <div className="col-span-full text-center py-12">
-              <p className="text-gray-500 text-lg mb-4">📭 Yaklaşan etkinlik bulunmuyor.</p>
-              <p className="text-sm text-gray-400">Yeni etkinlikler için takipte kalın!</p>
+          {/* RIGHT COLUMN - News (3 cols on lg) */}
+          <aside className="lg:col-span-3 order-3">
+            <div className="sticky top-20">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-[var(--color-fg)]">Haberler</h2>
+              </div>
+              <Separator className="mb-4" />
+              <NewsList news={formattedNews} showViewAll={news.length >= 5} />
             </div>
-          )}
+          </aside>
         </div>
-        <div className="mt-10 text-center">
-          <Link href="/etkinlikler">
-            <Button size="lg" variant="outline" className="border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold">
-              Tüm Etkinlikleri Görüntüle →
-            </Button>
-          </Link>
-        </div>
-      </section>
-    </div>
+      </main>
+
+      <Footer />
     </div>
   );
 }

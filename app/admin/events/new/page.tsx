@@ -14,10 +14,10 @@ export default function NewEventPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold text-gray-900">
+        <h1 className="mb-2 text-3xl font-bold text-[var(--color-fg)]">
           Yeni Etkinlik
         </h1>
-        <p className="text-gray-600">Yeni bir etkinlik oluşturun</p>
+        <p className="text-[var(--color-fg)]/70">Yeni bir etkinlik oluşturun</p>
       </div>
 
       <Card>

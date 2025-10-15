@@ -15,8 +15,26 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
+    const type = searchParams.get('type');
+    const search = searchParams.get('search');
 
-    const where = status ? { status: status as 'DRAFT' | 'PUBLISHED' } : {};
+    const where: { status?: 'DRAFT' | 'PUBLISHED'; type?: 'NEWS' | 'ANNOUNCEMENT'; OR?: { title?: { contains: string; mode: 'insensitive' }; excerpt?: { contains: string; mode: 'insensitive' }; content?: { contains: string; mode: 'insensitive' } }[] } = {};
+
+    if (status) {
+      where.status = status as 'DRAFT' | 'PUBLISHED';
+    }
+
+    if (type) {
+      where.type = type as 'NEWS' | 'ANNOUNCEMENT';
+    }
+
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { excerpt: { contains: search, mode: 'insensitive' } },
+        { content: { contains: search, mode: 'insensitive' } },
+      ];
+    }
 
     const posts = await prisma.post.findMany({
       where,
@@ -30,7 +48,7 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    return NextResponse.json(posts);
+    return NextResponse.json({ posts });
   } catch (error) {
     console.error('GET /api/posts error:', error);
     return NextResponse.json(
@@ -68,6 +86,8 @@ export async function POST(request: NextRequest) {
         slug,
         content: validatedData.content,
         excerpt: validatedData.excerpt,
+        coverImage: validatedData.coverImage || null,
+        type: validatedData.type || 'NEWS',
         status: validatedData.status,
         publishedAt:
           validatedData.status === 'PUBLISHED' ? new Date() : null,

@@ -15,15 +15,28 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
+    const search = searchParams.get('search');
 
-    const where = status ? { status: status as 'DRAFT' | 'PUBLISHED' } : {};
+    const where: { status?: 'DRAFT' | 'PUBLISHED'; OR?: { title?: { contains: string; mode: 'insensitive' }; description?: { contains: string; mode: 'insensitive' }; location?: { contains: string; mode: 'insensitive' } }[] } = {};
+
+    if (status) {
+      where.status = status as 'DRAFT' | 'PUBLISHED';
+    }
+
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+        { location: { contains: search, mode: 'insensitive' } },
+      ];
+    }
 
     const events = await prisma.event.findMany({
       where,
       orderBy: { startsAt: 'desc' },
     });
 
-    return NextResponse.json(events);
+    return NextResponse.json({ events });
   } catch (error) {
     console.error('GET /api/events error:', error);
     return NextResponse.json(
@@ -63,6 +76,7 @@ export async function POST(request: NextRequest) {
         startsAt: new Date(validatedData.startsAt),
         endsAt: validatedData.endsAt ? new Date(validatedData.endsAt) : null,
         location: validatedData.location,
+        coverImage: validatedData.coverImage || null,
         status: validatedData.status,
       },
     });

@@ -11,6 +11,7 @@ import { eventFormSchema, type EventFormData } from '@/lib/validations/event';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Button } from '@/components/ui/Button';
+import { ImageUpload } from '@/components/ui/ImageUpload';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -26,6 +27,8 @@ export function EventForm({ initialData, mode }: EventFormProps) {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<EventFormData>({
     resolver: zodResolver(eventFormSchema),
@@ -35,9 +38,12 @@ export function EventForm({ initialData, mode }: EventFormProps) {
       startsAt: '',
       endsAt: '',
       location: '',
+      coverImage: '',
       status: 'DRAFT',
     },
   });
+
+  const coverImage = watch('coverImage');
 
   const onSubmit = async (data: EventFormData) => {
     setIsSubmitting(true);
@@ -51,7 +57,10 @@ export function EventForm({ initialData, mode }: EventFormProps) {
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          coverImage: data.coverImage || null,
+        }),
       });
 
       if (!response.ok) {
@@ -85,6 +94,14 @@ export function EventForm({ initialData, mode }: EventFormProps) {
         rows={10}
       />
 
+      <ImageUpload
+        value={coverImage}
+        onChange={(url) => setValue('coverImage', url)}
+        onRemove={() => setValue('coverImage', '')}
+        label="Kapak Görseli (İsteğe Bağlı)"
+        error={errors.coverImage?.message}
+      />
+
       <div className="grid gap-6 md:grid-cols-2">
         <Input
           label="Başlangıç Tarihi ve Saati"
@@ -109,12 +126,12 @@ export function EventForm({ initialData, mode }: EventFormProps) {
       />
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label className="mb-1 block text-sm font-medium text-[var(--color-fg)]">
           Durum
         </label>
         <select
           {...register('status')}
-          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-card-bg)] text-[var(--color-fg)] px-3 py-2 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/20"
         >
           <option value="DRAFT">Taslak</option>
           <option value="PUBLISHED">Yayınla</option>

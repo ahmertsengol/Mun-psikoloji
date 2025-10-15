@@ -7,15 +7,27 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { postFormSchema, type PostFormData } from '@/lib/validations/post';
+import { z } from 'zod';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Button } from '@/components/ui/Button';
+import { ImageUpload } from '@/components/ui/ImageUpload';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+// Form için schema (type olmadan)
+const postFormSchemaWithoutType = z.object({
+  title: z.string().min(1, 'Başlık gereklidir').max(200, 'Başlık çok uzun'),
+  content: z.string().min(1, 'İçerik gereklidir'),
+  excerpt: z.string().max(500, 'Özet çok uzun').optional(),
+  coverImage: z.string().url('Geçerli bir URL olmalı').optional().or(z.literal('')),
+  status: z.enum(['DRAFT', 'PUBLISHED']),
+});
+
+type PostFormDataWithoutType = z.infer<typeof postFormSchemaWithoutType>;
+
 interface PostFormProps {
-  initialData?: PostFormData & { id?: string };
+  initialData?: PostFormDataWithoutType & { id?: string };
   mode: 'create' | 'edit';
 }
 
@@ -26,18 +38,23 @@ export function PostForm({ initialData, mode }: PostFormProps) {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
-  } = useForm<PostFormData>({
-    resolver: zodResolver(postFormSchema),
+  } = useForm<PostFormDataWithoutType>({
+    resolver: zodResolver(postFormSchemaWithoutType),
     defaultValues: initialData || {
       title: '',
       content: '',
       excerpt: '',
+      coverImage: '',
       status: 'DRAFT',
     },
   });
 
-  const onSubmit = async (data: PostFormData) => {
+  const coverImage = watch('coverImage');
+
+  const onSubmit = async (data: PostFormDataWithoutType) => {
     setIsSubmitting(true);
     try {
       const url =
@@ -49,7 +66,10 @@ export function PostForm({ initialData, mode }: PostFormProps) {
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          type: 'NEWS', // Haber olarak işaretle
+        }),
       });
 
       if (!response.ok) {
@@ -83,6 +103,14 @@ export function PostForm({ initialData, mode }: PostFormProps) {
         rows={3}
       />
 
+      <ImageUpload
+        value={coverImage}
+        onChange={(url) => setValue('coverImage', url)}
+        onRemove={() => setValue('coverImage', '')}
+        label="Kapak Görseli (İsteğe Bağlı)"
+        error={errors.coverImage?.message}
+      />
+
       <Textarea
         label="İçerik"
         {...register('content')}
@@ -92,12 +120,12 @@ export function PostForm({ initialData, mode }: PostFormProps) {
       />
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label className="mb-1 block text-sm font-medium text-[var(--color-fg)]">
           Durum
         </label>
         <select
           {...register('status')}
-          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-card-bg)] text-[var(--color-fg)] px-3 py-2 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/20"
         >
           <option value="DRAFT">Taslak</option>
           <option value="PUBLISHED">Yayınla</option>

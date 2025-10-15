@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -10,6 +11,14 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Munzur Üniversitesi Psikoloji Kulübü",
   description: "Munzur Üniversitesi Psikoloji Kulübü topluluk sitesi. Bu site resmi değildir.",
+  keywords: ["psikoloji", "munzur üniversitesi", "kulüp", "etkinlikler", "haberler"],
+  authors: [{ name: "Munzur Psikoloji Kulübü" }],
+  openGraph: {
+    title: "Munzur Üniversitesi Psikoloji Kulübü",
+    description: "Munzur Üniversitesi Psikoloji Kulübü topluluk sitesi",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 export default function RootLayout({
@@ -18,9 +27,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="tr">
+    <html lang="tr" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

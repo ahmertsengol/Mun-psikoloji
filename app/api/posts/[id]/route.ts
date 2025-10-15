@@ -95,6 +95,8 @@ export async function PUT(
         slug,
         content: validatedData.content,
         excerpt: validatedData.excerpt,
+        coverImage: validatedData.coverImage || null,
+        type: validatedData.type || existingPost.type,
         status: validatedData.status,
         publishedAt: shouldSetPublishedAt
           ? new Date()

@@ -2,19 +2,26 @@
  * Public Footer Component
  */
 
+import Link from "next/link";
+import { Brain, Mail, MapPin } from "lucide-react";
+
 export function Footer() {
   return (
-    <footer className="border-t bg-gradient-to-br from-gray-50 to-blue-50">
-      <div className="container mx-auto px-4 py-12">
-        <div className="mb-8 rounded-xl border-2 border-purple-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
-          <p className="text-center text-sm font-medium text-gray-700">
-            ⚠️ <span className="font-semibold text-purple-700">Bu site resmi değildir;</span> Munzur Üniversitesi Psikoloji Kulübü
-            topluluk sayfasıdır. Resmi duyurular için{' '}
+    <footer className="border-t border-[var(--color-border)] bg-[var(--color-card-bg)]/80 backdrop-blur-sm">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Warning Banner */}
+        <div className="mb-8 rounded-lg border-2 border-[var(--color-accent)] bg-[var(--color-card-bg)] p-5 shadow-sm">
+          <p className="text-center text-sm font-medium text-[var(--color-fg)]">
+            <span className="inline-flex items-center gap-2 mb-1">
+              <span className="text-lg">⚠️</span>
+              <span className="font-semibold text-[var(--color-accent)]">Bu site resmi değildir;</span>
+            </span>
+            {" "}Munzur Üniversitesi Psikoloji Kulübü topluluk sayfasıdır. Resmi duyurular için{" "}
             <a
               href="https://munzur.edu.tr"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-bold text-purple-600 underline decoration-2 underline-offset-2 transition-colors hover:text-purple-800"
+              className="font-bold text-[var(--color-accent)] underline decoration-2 underline-offset-2 transition-colors hover:text-[var(--color-accent2)]"
             >
               munzur.edu.tr
             </a>
@@ -23,68 +30,82 @@ export function Footer() {
         </div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          {/* About */}
           <div>
             <div className="mb-4 flex items-center gap-2">
-              <span className="text-2xl">🧠</span>
-              <h3 className="text-lg font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <Brain className="h-6 w-6 text-[var(--color-accent)]" />
+              <h3 className="text-lg font-bold text-[var(--color-fg)]">
                 Munzur Psikoloji Kulübü
               </h3>
             </div>
-            <p className="text-sm text-gray-600 leading-relaxed">
+            <p className="text-sm text-[var(--color-fg)]/70 leading-relaxed">
               Munzur Üniversitesi Psikoloji öğrencileri ve meraklıları için topluluk platformu.
               Bilgi paylaşımı, etkinlikler ve sosyal etkileşim.
             </p>
           </div>
+
+          {/* Quick Links */}
           <div>
-            <h3 className="mb-4 text-lg font-semibold text-gray-900 flex items-center gap-2">
-              <span className="text-xl">🔗</span>
+            <h3 className="mb-4 text-lg font-semibold text-[var(--color-fg)]">
               Hızlı Bağlantılar
             </h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <a
+                <Link
                   href="/haberler"
-                  className="text-gray-600 transition-all hover:text-purple-600 hover:translate-x-1 inline-block"
+                  className="text-[var(--color-fg)]/70 transition-colors hover:text-[var(--color-accent)] inline-block"
                 >
-                  📰 Haberler
-                </a>
+                  Haberler
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/etkinlikler"
-                  className="text-gray-600 transition-all hover:text-purple-600 hover:translate-x-1 inline-block"
+                  className="text-[var(--color-fg)]/70 transition-colors hover:text-[var(--color-accent)] inline-block"
                 >
-                  📅 Etkinlikler
-                </a>
+                  Etkinlikler
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/iletisim"
-                  className="text-gray-600 transition-all hover:text-purple-600 hover:translate-x-1 inline-block"
+                  className="text-[var(--color-fg)]/70 transition-colors hover:text-[var(--color-accent)] inline-block"
                 >
-                  ✉️ İletişim
-                </a>
+                  İletişim
+                </Link>
               </li>
             </ul>
           </div>
+
+          {/* Contact */}
           <div>
-            <h3 className="mb-4 text-lg font-semibold text-gray-900 flex items-center gap-2">
-              <span className="text-xl">📍</span>
+            <h3 className="mb-4 text-lg font-semibold text-[var(--color-fg)]">
               İletişim
             </h3>
-            <div className="space-y-2 text-sm text-gray-600">
+            <div className="space-y-3 text-sm text-[var(--color-fg)]/70">
               <p className="flex items-start gap-2">
-                <span className="text-purple-600">🏫</span>
+                <MapPin className="h-4 w-4 text-[var(--color-accent)] mt-0.5" />
                 <span>Munzur Üniversitesi<br />Tunceli, Türkiye</span>
+              </p>
+              <p className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-[var(--color-accent)]" />
+                <a
+                  href="mailto:info@munzurpsikoloji.com"
+                  className="hover:text-[var(--color-accent)] transition-colors"
+                >
+                  info@munzurpsikoloji.com
+                </a>
               </p>
             </div>
           </div>
         </div>
 
-        <div className="mt-10 border-t border-purple-100 pt-8">
-          <p className="text-center text-sm text-gray-600">
-            &copy; {new Date().getFullYear()} <span className="font-semibold text-purple-700">Munzur Psikoloji Kulübü</span> Topluluk
-            Sitesi. Tüm hakları saklıdır.
+        {/* Copyright */}
+        <div className="mt-10 border-t border-[var(--color-border)] pt-8">
+          <p className="text-center text-sm text-[var(--color-fg)]/60">
+            &copy; {new Date().getFullYear()}{" "}
+            <span className="font-semibold text-[var(--color-fg)]">Munzur Psikoloji Kulübü</span>{" "}
+            Topluluk Sitesi. Tüm hakları saklıdır.
           </p>
         </div>
       </div>

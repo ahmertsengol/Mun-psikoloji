@@ -20,7 +20,7 @@ export async function getCurrentUser() {
   }
 
   // Get user from database to include role
-  const dbUser = await prisma.user.findUnique({
+  let dbUser = await prisma.user.findUnique({
     where: { id: user.id },
     select: {
       id: true,
@@ -29,6 +29,23 @@ export async function getCurrentUser() {
       createdAt: true,
     },
   });
+
+  // If user doesn't exist in database, create them
+  if (!dbUser && user.email) {
+    dbUser = await prisma.user.create({
+      data: {
+        id: user.id,
+        email: user.email,
+        role: 'MEMBER', // Default role
+      },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        createdAt: true,
+      },
+    });
+  }
 
   return dbUser;
 }

@@ -45,16 +45,17 @@ export default async function EditEventPage({ params }: PageProps) {
       ? format(new Date(event.endsAt), "yyyy-MM-dd'T'HH:mm")
       : '',
     location: event.location || '',
+    coverImage: event.coverImage || '',
     status: event.status,
   };
 
   return (
     <div>
       <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold text-gray-900">
+        <h1 className="mb-2 text-3xl font-bold text-[var(--color-fg)]">
           Etkinlik Düzenle
         </h1>
-        <p className="text-gray-600">{event.title}</p>
+        <p className="text-[var(--color-fg)]/70">{event.title}</p>
       </div>
 
       <Card>

@@ -1,26 +1,254 @@
 @import "tailwindcss";
 
+/* Light Theme Variables (Soft) */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #F8FAFC; /* slate-50 */
+  --fg: #0B1220; /* slate-900 */
+  --muted: #E8EEF5;
+  --accent: #2F6FEB; /* soft blue */
+  --accent-2: #14B8A6; /* turquoise */
+  --card-bg: #FFFFFF;
+  --border: #E2E8F0;
+  --ring: 0 0% 0%;
+  --radius: 1rem;
+
+  /* Gradient backgrounds */
+  --gradient-from: rgba(47, 111, 235, 0.08);
+  --gradient-to: rgba(20, 184, 166, 0.08);
 }
 
+/* Dark Theme Variables (Soft) */
+.dark {
+  --bg: #0B1220;
+  --fg: #E6EAF2;
+  --muted: #1A2437;
+  --accent: #7AA2FF; /* soft blue */
+  --accent-2: #5AD7C2;
+  --card-bg: #141D2E;
+  --border: #2A3648;
+  --ring: 0 0% 100%;
+
+  /* Gradient backgrounds */
+  --gradient-from: rgba(122, 162, 255, 0.10);
+  --gradient-to: rgba(90, 215, 194, 0.08);
+}
+
+/* Tailwind Theme Inline Config */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Colors */
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent2: var(--accent-2);
+  --color-card-bg: var(--card-bg);
+  --color-border: var(--border);
+
+  /* Border Radius */
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 8px);
+
+  /* Spacing */
+  --spacing-page-x: 1.5rem;
+
+  /* Shadows */
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-soft-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-soft-lg: 0 8px 24px rgba(0, 0, 0, 0.10);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base Styles */
+* {
+  @apply border-[var(--color-border)];
+}
+
+html {
+  @apply scroll-smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-[var(--color-bg)] text-[var(--color-fg)] antialiased;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  transition: background-color 300ms ease, color 200ms ease;
+}
+
+/* Gradient Background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
+  pointer-events: none;
+  z-index: -1;
+  opacity: 1;
+  transition: opacity 300ms ease;
+}
+
+/* Focus Ring */
+:focus-visible {
+  @apply outline-none ring-2 ring-[var(--color-accent)] ring-offset-2 ring-offset-[var(--color-bg)];
+  transition: box-shadow 150ms ease;
+}
+
+/* Motion Reduce */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Selection */
+::selection {
+  @apply bg-[var(--color-accent)]/20 text-[var(--color-fg)];
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-semibold text-[var(--color-fg)];
+}
+
+h1 {
+  @apply text-3xl md:text-4xl lg:text-5xl;
+}
+
+h2 {
+  @apply text-2xl md:text-3xl lg:text-4xl;
+}
+
+h3 {
+  @apply text-xl md:text-2xl lg:text-3xl;
+}
+
+/* Links */
+a {
+  @apply text-[var(--color-accent)] hover:text-[var(--color-accent2)] transition-colors duration-200;
+}
+
+/* Prose */
+.prose {
+  @apply max-w-prose leading-7 text-[var(--color-fg)];
+}
+
+.prose p {
+  @apply mb-4;
+}
+
+.prose ul,
+.prose ol {
+  @apply mb-4 pl-6;
+}
+
+.prose li {
+  @apply mb-2;
+}
+
+.prose ul li {
+  @apply list-disc;
+}
+
+.prose ol li {
+  @apply list-decimal;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-[var(--color-accent)] pl-4 italic my-4;
+}
+
+.prose code {
+  @apply bg-[var(--color-muted)] px-1.5 py-0.5 rounded text-sm;
+}
+
+.prose pre {
+  @apply bg-[var(--color-muted)] p-4 rounded-lg overflow-x-auto my-4;
+}
+
+/* Scrollbar - Global */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-[var(--color-muted)];
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-[var(--color-accent)]/40 rounded-lg;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-[var(--color-accent)]/60;
+}
+
+/* Custom Scrollbar - Thin variant for sidebars */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-[var(--color-border)] rounded-full;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  @apply bg-[var(--color-fg)]/30;
+}
+
+/* Skeleton Loading */
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.skeleton {
+  @apply bg-[var(--color-muted)] rounded-lg;
+  animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Card Hover Effect */
+.card-hover {
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft-lg);
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 400ms ease-out;
 }

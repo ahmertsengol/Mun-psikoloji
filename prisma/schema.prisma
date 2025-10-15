@@ -39,6 +39,8 @@ model Post {
   slug        String     @unique
   content     String     @db.Text
   excerpt     String?    @db.Text
+  coverImage  String?    // Kapak görseli URL
+  type        PostType   @default(NEWS)
   status      PostStatus @default(DRAFT)
   publishedAt DateTime?
   createdAt   DateTime   @default(now())
@@ -49,8 +51,14 @@ model Post {
   author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
 
   @@index([status, publishedAt])
+  @@index([type, status])
   @@index([slug])
   @@map("posts")
+}
+
+enum PostType {
+  NEWS
+  ANNOUNCEMENT
 }
 
 enum PostStatus {
@@ -67,6 +75,7 @@ model Event {
   endsAt      DateTime?
   location    String?
   description String      @db.Text
+  coverImage  String?     // Kapak görseli URL
   status      EventStatus @default(DRAFT)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt

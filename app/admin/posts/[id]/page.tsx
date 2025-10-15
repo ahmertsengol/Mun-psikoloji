@@ -14,7 +14,7 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps) {
   const { id } = await params;
   const post = await prisma.post.findUnique({
-    where: { id },
+    where: { id, type: 'NEWS' },
     select: { title: true },
   });
 
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: PageProps) {
 export default async function EditPostPage({ params }: PageProps) {
   const { id } = await params;
   const post = await prisma.post.findUnique({
-    where: { id },
+    where: { id, type: 'NEWS' },
   });
 
   if (!post) {
@@ -38,16 +38,17 @@ export default async function EditPostPage({ params }: PageProps) {
     title: post.title,
     content: post.content,
     excerpt: post.excerpt || '',
+    coverImage: post.coverImage || '',
     status: post.status,
   };
 
   return (
     <div>
       <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold text-gray-900">
+        <h1 className="mb-2 text-3xl font-bold text-[var(--color-fg)]">
           Haber Düzenle
         </h1>
-        <p className="text-gray-600">{post.title}</p>
+        <p className="text-[var(--color-fg)]/70">{post.title}</p>
       </div>
 
       <Card>

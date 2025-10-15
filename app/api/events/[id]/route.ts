@@ -85,6 +85,7 @@ export async function PUT(
         startsAt: new Date(validatedData.startsAt),
         endsAt: validatedData.endsAt ? new Date(validatedData.endsAt) : null,
         location: validatedData.location,
+        coverImage: validatedData.coverImage || null,
         status: validatedData.status,
       },
     });
