@@ -1,103 +1,213 @@
-import Image from "next/image";
+/**
+ * Home Page - Landing page
+ */
 
-export default function Home() {
+import Link from 'next/link';
+import { prisma } from '@/lib/db/prisma';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { format } from 'date-fns';
+import { tr } from 'date-fns/locale';
+
+export const metadata = {
+  title: 'Anasayfa | Munzur Psikoloji Kulübü',
+  description:
+    'Munzur Üniversitesi Psikoloji Kulübü topluluk sitesi. Haberler, etkinlikler ve daha fazlası.',
+};
+
+export default async function Home() {
+  // Fetch latest published posts
+  const latestPosts = await prisma.post.findMany({
+    where: { status: 'PUBLISHED' },
+    orderBy: { publishedAt: 'desc' },
+    take: 3,
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      publishedAt: true,
+    },
+  });
+
+  // Fetch upcoming events
+  const upcomingEvents = await prisma.event.findMany({
+    where: {
+      status: 'PUBLISHED',
+      startsAt: { gte: new Date() },
+    },
+    orderBy: { startsAt: 'asc' },
+    take: 3,
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      startsAt: true,
+      location: true,
+    },
+  });
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 px-4 py-20 text-white">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="container relative z-10 mx-auto">
+          {/* Warning Banner */}
+          <div className="mb-8 rounded-xl border-2 border-white/30 bg-white/20 p-4 backdrop-blur-sm">
+            <p className="text-center text-sm font-medium text-white">
+              ⚠️ Bu site resmi değildir; Munzur Üniversitesi Psikoloji Kulübü topluluk sayfasıdır.
+              Resmi duyurular için{' '}
+              <a
+                href="https://munzur.edu.tr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold underline hover:text-yellow-300"
+              >
+                munzur.edu.tr
+              </a>
+              'yi takip ediniz.
+            </p>
+          </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          <div className="text-center">
+            <h1 className="mb-6 text-5xl font-extrabold leading-tight md:text-6xl lg:text-7xl">
+              Munzur Üniversitesi
+              <br />
+              <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
+                Psikoloji Kulübü
+              </span>
+            </h1>
+            <p className="mx-auto mb-10 max-w-3xl text-xl text-white/90 md:text-2xl">
+              🧠 Psikoloji öğrencileri ve meraklıları için topluluk platformu.
+              Haberler, etkinlikler ve bilgi paylaşımı.
+            </p>
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <Link href="/haberler">
+                <Button size="lg" className="bg-white text-purple-700 hover:bg-gray-100 font-semibold shadow-lg">
+                  📰 Haberleri İncele
+                </Button>
+              </Link>
+              <Link href="/etkinlikler">
+                <Button variant="secondary" size="lg" className="bg-transparent border-2 border-white text-white hover:bg-white/10 font-semibold">
+                  📅 Etkinlikleri Gör
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      <div className="container mx-auto px-4 py-16">
+        {/* Latest Posts */}
+        <section className="mb-20">
+          <div className="mb-10 text-center">
+            <h2 className="mb-3 text-4xl font-bold text-gray-900">📰 Son Haberler</h2>
+            <p className="text-lg text-gray-600">Psikoloji kulübünden güncel haberler</p>
+          </div>
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {latestPosts.length > 0 ? (
+            latestPosts.map((post) => (
+              <Card key={post.id} className="transition-all hover:shadow-xl hover:-translate-y-1">
+                <CardHeader>
+                  <CardTitle>
+                    <Link
+                      href={`/haberler/${post.slug}`}
+                      className="text-gray-900 hover:text-purple-600 transition-colors"
+                    >
+                      {post.title}
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="mb-4 text-sm text-gray-600 line-clamp-3">
+                    {post.excerpt || 'Haber içeriğini görmek için tıklayın...'}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-gray-500">
+                      {post.publishedAt
+                        ? format(new Date(post.publishedAt), 'dd MMMM yyyy', {
+                            locale: tr,
+                          })
+                        : ''}
+                    </p>
+                    <Link href={`/haberler/${post.slug}`}>
+                      <Button variant="ghost" size="sm">Okuyun →</Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12">
+              <p className="text-gray-500 text-lg mb-4">📭 Henüz haber bulunmuyor.</p>
+              <p className="text-sm text-gray-400">Yakında yeni içerikler paylaşılacak!</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Upcoming Events */}
+      <section>
+        <div className="mb-10 text-center">
+          <h2 className="mb-3 text-4xl font-bold text-gray-900">📅 Yaklaşan Etkinlikler</h2>
+          <p className="text-lg text-gray-600">Kulüp etkinliklerine katılın, yeni insanlarla tanışın</p>
+        </div>
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {upcomingEvents.length > 0 ? (
+            upcomingEvents.map((event) => (
+              <Card key={event.id} className="transition-all hover:shadow-xl hover:-translate-y-1 border-l-4 border-l-purple-500">
+                <CardHeader>
+                  <CardTitle>
+                    <Link
+                      href={`/etkinlikler/${event.slug}`}
+                      className="text-gray-900 hover:text-purple-600 transition-colors"
+                    >
+                      {event.title}
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-2">
+                      <span className="text-purple-600 mt-0.5">🕐</span>
+                      <p className="text-sm text-gray-700 font-medium">
+                        {format(new Date(event.startsAt), 'dd MMMM yyyy, HH:mm', {
+                          locale: tr,
+                        })}
+                      </p>
+                    </div>
+                    {event.location && (
+                      <div className="flex items-start gap-2">
+                        <span className="text-purple-600 mt-0.5">📍</span>
+                        <p className="text-sm text-gray-600">{event.location}</p>
+                      </div>
+                    )}
+                    <Link href={`/etkinlikler/${event.slug}`}>
+                      <Button variant="ghost" size="sm" className="mt-2 w-full">
+                        Detayları Gör →
+                      </Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12">
+              <p className="text-gray-500 text-lg mb-4">📭 Yaklaşan etkinlik bulunmuyor.</p>
+              <p className="text-sm text-gray-400">Yeni etkinlikler için takipte kalın!</p>
+            </div>
+          )}
+        </div>
+        <div className="mt-10 text-center">
+          <Link href="/etkinlikler">
+            <Button size="lg" variant="outline" className="border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold">
+              Tüm Etkinlikleri Görüntüle →
+            </Button>
+          </Link>
+        </div>
+      </section>
+    </div>
     </div>
   );
 }

@@ -1,0 +1,33 @@
+/**
+ * New Event Page
+ */
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { EventForm } from '@/components/admin/events/EventForm';
+
+export const metadata = {
+  title: 'Yeni Etkinlik | Admin Panel',
+  description: 'Yeni etkinlik oluştur',
+};
+
+export default function NewEventPage() {
+  return (
+    <div>
+      <div className="mb-8">
+        <h1 className="mb-2 text-3xl font-bold text-gray-900">
+          Yeni Etkinlik
+        </h1>
+        <p className="text-gray-600">Yeni bir etkinlik oluşturun</p>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Etkinlik Bilgileri</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <EventForm mode="create" />
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

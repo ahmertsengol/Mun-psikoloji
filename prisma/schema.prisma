@@ -1,0 +1,114 @@
+// Munzur Üniversitesi Psikoloji Kulübü Database Schema
+// This is the main database schema for the unofficial community website
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// User model - synced with Supabase Auth
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  role      Role     @default(MEMBER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  posts Post[]
+  logs  AuditLog[]
+
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  MEMBER
+}
+
+// Post model - blog posts and news articles
+model Post {
+  id          String     @id @default(uuid())
+  title       String
+  slug        String     @unique
+  content     String     @db.Text
+  excerpt     String?    @db.Text
+  status      PostStatus @default(DRAFT)
+  publishedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  authorId    String?
+
+  // Relations
+  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([status, publishedAt])
+  @@index([slug])
+  @@map("posts")
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+}
+
+// Event model - psychology club events
+model Event {
+  id          String      @id @default(uuid())
+  title       String
+  slug        String      @unique
+  startsAt    DateTime
+  endsAt      DateTime?
+  location    String?
+  description String      @db.Text
+  status      EventStatus @default(DRAFT)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([status, startsAt])
+  @@index([slug])
+  @@map("events")
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+}
+
+// Media model - uploaded files and images
+model Media {
+  id        String   @id @default(uuid())
+  url       String
+  fileName  String
+  fileSize  Int
+  mimeType  String
+  alt       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("media")
+}
+
+// AuditLog model - track all important actions
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String
+  metadata  String?  @db.Text
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([entity, entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
