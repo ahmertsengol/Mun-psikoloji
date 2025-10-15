@@ -1,8 +1,9 @@
 import Link from "next/link";
+import Image from "next/image";
+import { Megaphone, Bell } from "lucide-react";
 import { Badge } from "../ui/Badge";
 import { formatDateBadge, formatDateFull } from "@/lib/date";
 import { cn } from "@/lib/utils";
-import { Bell } from "lucide-react";
 
 interface AnnouncementCardProps {
   id: string;
@@ -10,6 +11,7 @@ interface AnnouncementCardProps {
   slug: string;
   excerpt?: string | null;
   publishedAt: string;
+  coverImage?: string | null;
   className?: string;
 }
 
@@ -18,45 +20,64 @@ export function AnnouncementCard({
   slug,
   excerpt,
   publishedAt,
+  coverImage,
   className,
 }: AnnouncementCardProps) {
   return (
     <Link href={`/duyurular/${slug}`} className="block group">
       <article
         className={cn(
-          "bg-[var(--color-card-bg)] rounded-lg border border-[var(--color-border)]",
-          "p-4 hover:shadow-[var(--shadow-soft)] transition-all duration-200",
-          "hover:border-[var(--color-accent2)]",
+          "bg-[var(--color-card-bg)] rounded-2xl border border-[var(--color-border)]",
+          "shadow-[var(--shadow-soft-md)] overflow-hidden",
+          "card-hover transition-all duration-200",
           className
         )}
       >
-        <div className="flex items-start gap-3">
-          {/* Icon */}
-          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[var(--color-accent2)]/10 flex items-center justify-center">
-            <Bell className="h-5 w-5 text-[var(--color-accent2)]" />
-          </div>
+        {/* Cover image or placeholder */}
+        <div className="h-48 relative overflow-hidden">
+          {coverImage ? (
+            <Image
+              src={coverImage}
+              alt={title}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
+            <div className="h-full bg-gradient-to-br from-[var(--color-accent2)]/20 to-[var(--color-accent)]/20">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Megaphone className="h-16 w-16 text-[var(--color-accent2)]/40" />
+              </div>
+            </div>
+          )}
+        </div>
 
-          {/* Content */}
-          <div className="flex-1 min-w-0">
-            {/* Date */}
-            <Badge variant="secondary" className="mb-2" title={formatDateFull(publishedAt)}>
+        <div className="p-5">
+          {/* Date Badge with Icon */}
+          <div className="flex items-center gap-2 mb-3">
+            <Badge variant="default" title={formatDateFull(publishedAt)}>
               {formatDateBadge(publishedAt)}
             </Badge>
+            <span className="flex items-center gap-1 text-xs text-[var(--color-fg)]/60">
+              <Bell className="h-3 w-3" />
+              Duyuru
+            </span>
+          </div>
 
-            {/* Title */}
-            <h3 className="text-sm font-medium text-[var(--color-fg)] line-clamp-2 mb-1 group-hover:text-[var(--color-accent2)] transition-colors">
-              {title}
-            </h3>
+          {/* Title */}
+          <h3 className="text-lg font-semibold text-[var(--color-fg)] mb-2 line-clamp-2 group-hover:text-[var(--color-accent2)] transition-colors">
+            {title}
+          </h3>
 
-            {/* Excerpt */}
-            {excerpt && (
-              <p className="text-xs text-[var(--color-fg)]/60 line-clamp-2 mb-2">
-                {excerpt}
-              </p>
-            )}
+          {/* Excerpt */}
+          {excerpt && (
+            <p className="text-sm text-[var(--color-fg)]/70 line-clamp-3 leading-relaxed">
+              {excerpt}
+            </p>
+          )}
 
-            {/* Read More Link */}
-            <span className="text-xs text-[var(--color-accent2)] font-medium group-hover:underline">
+          {/* Footer */}
+          <div className="mt-4 pt-4 border-t border-[var(--color-border)]">
+            <span className="text-xs font-medium text-[var(--color-accent2)] group-hover:text-[var(--color-accent)] transition-colors">
               Devamını oku →
             </span>
           </div>

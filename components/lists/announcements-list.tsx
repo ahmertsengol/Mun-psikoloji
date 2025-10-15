@@ -7,6 +7,7 @@ interface Announcement {
   title: string;
   slug: string;
   excerpt?: string | null;
+  coverImage?: string | null; // Kapak görseli eklendi
   publishedAt: string;
 }
 

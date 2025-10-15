@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Badge } from "../ui/Badge";
 import { formatDateBadge, formatDateFull } from "@/lib/date";
 import { cn } from "@/lib/utils";
@@ -9,6 +10,7 @@ interface NewsCardProps {
   title: string;
   slug: string;
   excerpt?: string | null;
+  coverImage?: string | null; // Kapak görseli eklendi
   publishedAt: string;
   className?: string;
 }
@@ -17,6 +19,7 @@ export function NewsCard({
   title,
   slug,
   excerpt,
+  coverImage,
   publishedAt,
   className,
 }: NewsCardProps) {
@@ -31,9 +34,22 @@ export function NewsCard({
         )}
       >
         <div className="flex items-start gap-3">
-          {/* Icon */}
-          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[var(--color-accent)]/10 flex items-center justify-center">
-            <Newspaper className="h-5 w-5 text-[var(--color-accent)]" />
+          {/* Thumbnail or Icon */}
+          <div className="flex-shrink-0">
+            {coverImage ? (
+              <div className="relative w-16 h-16 rounded-lg overflow-hidden">
+                <Image
+                  src={coverImage}
+                  alt={title}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
+            ) : (
+              <div className="w-10 h-10 rounded-lg bg-[var(--color-accent)]/10 flex items-center justify-center">
+                <Newspaper className="h-5 w-5 text-[var(--color-accent)]" />
+              </div>
+            )}
           </div>
 
           {/* Content */}

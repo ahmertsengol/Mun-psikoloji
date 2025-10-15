@@ -38,6 +38,12 @@ export function Header({ isAdmin = false }: HeaderProps) {
           {/* Navigation Links - Hidden on mobile, shown from md */}
           <nav className="hidden md:flex items-center gap-1">
             <Link
+              href="/duyurular"
+              className="px-3 py-2 text-sm font-medium text-[var(--color-fg)]/80 hover:text-[var(--color-accent)] hover:bg-[var(--color-muted)] rounded-md transition-colors"
+            >
+              Duyurular
+            </Link>
+            <Link
               href="/haberler"
               className="px-3 py-2 text-sm font-medium text-[var(--color-fg)]/80 hover:text-[var(--color-accent)] hover:bg-[var(--color-muted)] rounded-md transition-colors"
             >
@@ -85,22 +91,28 @@ export function Header({ isAdmin = false }: HeaderProps) {
         </div>
 
         {/* Mobile Navigation - Shown only on mobile */}
-        <nav className="md:hidden flex items-center gap-2 pb-3 border-t border-[var(--color-border)] pt-3">
+        <nav className="md:hidden flex items-center gap-1 pb-3 border-t border-[var(--color-border)] pt-3">
+          <Link
+            href="/duyurular"
+            className="flex-1 text-center px-2 py-2 text-xs font-medium text-[var(--color-fg)]/80 hover:text-[var(--color-accent)] hover:bg-[var(--color-muted)] rounded-md transition-colors"
+          >
+            Duyurular
+          </Link>
           <Link
             href="/haberler"
-            className="flex-1 text-center px-3 py-2 text-sm font-medium text-[var(--color-fg)]/80 hover:text-[var(--color-accent)] hover:bg-[var(--color-muted)] rounded-md transition-colors"
+            className="flex-1 text-center px-2 py-2 text-xs font-medium text-[var(--color-fg)]/80 hover:text-[var(--color-accent)] hover:bg-[var(--color-muted)] rounded-md transition-colors"
           >
             Haberler
           </Link>
           <Link
             href="/etkinlikler"
-            className="flex-1 text-center px-3 py-2 text-sm font-medium text-[var(--color-fg)]/80 hover:text-[var(--color-accent)] hover:bg-[var(--color-muted)] rounded-md transition-colors"
+            className="flex-1 text-center px-2 py-2 text-xs font-medium text-[var(--color-fg)]/80 hover:text-[var(--color-accent)] hover:bg-[var(--color-muted)] rounded-md transition-colors"
           >
             Etkinlikler
           </Link>
           <Link
             href="/iletisim"
-            className="flex-1 text-center px-3 py-2 text-sm font-medium text-[var(--color-fg)]/80 hover:text-[var(--color-accent)] hover:bg-[var(--color-muted)] rounded-md transition-colors"
+            className="flex-1 text-center px-2 py-2 text-xs font-medium text-[var(--color-fg)]/80 hover:text-[var(--color-accent)] hover:bg-[var(--color-muted)] rounded-md transition-colors"
           >
             İletişim
           </Link>

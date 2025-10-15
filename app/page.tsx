@@ -42,6 +42,7 @@ export default async function Home({ searchParams }: PageProps) {
       title: true,
       slug: true,
       excerpt: true,
+      coverImage: true, // Kapak görseli eklendi
       publishedAt: true,
     },
   });
@@ -59,6 +60,7 @@ export default async function Home({ searchParams }: PageProps) {
       title: true,
       slug: true,
       excerpt: true,
+      coverImage: true, // Kapak görseli eklendi
       publishedAt: true,
     },
   });
