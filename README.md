@@ -3,7 +3,7 @@
 Munzur Üniversitesi Psikoloji Kulübü için topluluk web sitesi. Haber, duyuru ve etkinlik yönetimi için modern bir platform.
 
 > ⚠️ **Not**: Bu site resmi değildir; topluluk projesidir. Resmi bilgiler için [munzur.edu.tr](https://munzur.edu.tr) adresini ziyaret edin.
-
+ 
 ## 🚀 Teknolojiler
 
 - **Next.js 15** (App Router) + TypeScript
