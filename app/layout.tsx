@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Analytics } from "@vercel/analytics/next";
+import { AnalyticsWrapper } from '@/components/analytics-wrapper';
+import { CookieManager } from "@/components/cookie-manager";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -37,8 +38,9 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           {children}
+          <CookieManager />
         </ThemeProvider>
-        <Analytics />
+        <AnalyticsWrapper />
       </body>
     </html>
   );
