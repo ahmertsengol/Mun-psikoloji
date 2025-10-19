@@ -1,9 +1,9 @@
 /**
  * Admin Layout
- * Layout for all admin pages with sidebar
+ * Responsive layout for all admin pages with sidebar
  */
 
-import { Sidebar } from '@/components/admin/Sidebar';
+import { AdminLayoutClient } from '@/components/admin/AdminLayoutClient';
 import { getCurrentUser } from '@/lib/utils/auth';
 import { redirect } from 'next/navigation';
 
@@ -24,12 +24,5 @@ export default async function AdminLayout({
     redirect('/');
   }
 
-  return (
-    <div className="flex h-screen overflow-hidden bg-[var(--color-bg)]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-[var(--color-bg)]">
-        <div className="container mx-auto px-6 py-8">{children}</div>
-      </main>
-    </div>
-  );
+  return <AdminLayoutClient>{children}</AdminLayoutClient>;
 }

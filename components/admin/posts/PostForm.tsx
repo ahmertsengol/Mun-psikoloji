@@ -87,7 +87,7 @@ export function PostForm({ initialData, mode }: PostFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
       <Input
         label="Başlık"
         {...register('title')}
@@ -116,16 +116,17 @@ export function PostForm({ initialData, mode }: PostFormProps) {
         {...register('content')}
         error={errors.content?.message}
         placeholder="Haber içeriği"
-        rows={15}
+        rows={10}
+        className="sm:rows-15"
       />
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-[var(--color-fg)]">
+        <label className="mb-1 sm:mb-2 block text-sm font-medium text-[var(--color-fg)]">
           Durum
         </label>
         <select
           {...register('status')}
-          className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-card-bg)] text-[var(--color-fg)] px-3 py-2 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/20"
+          className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-card-bg)] text-[var(--color-fg)] px-3 sm:px-4 py-3 sm:py-2 text-base sm:text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/20 touch-manipulation"
         >
           <option value="DRAFT">Taslak</option>
           <option value="PUBLISHED">Yayınla</option>
@@ -135,8 +136,8 @@ export function PostForm({ initialData, mode }: PostFormProps) {
         )}
       </div>
 
-      <div className="flex gap-4">
-        <Button type="submit" disabled={isSubmitting}>
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
+        <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
           {isSubmitting
             ? 'Kaydediliyor...'
             : mode === 'create'
@@ -147,6 +148,7 @@ export function PostForm({ initialData, mode }: PostFormProps) {
           type="button"
           variant="secondary"
           onClick={() => router.push('/admin/posts')}
+          className="w-full sm:w-auto"
         >
           İptal
         </Button>

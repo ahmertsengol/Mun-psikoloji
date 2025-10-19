@@ -13,16 +13,16 @@ export const metadata = {
 export default function NewPostPage() {
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold text-[var(--color-fg)]">Yeni Haber</h1>
-        <p className="text-[var(--color-fg)]/70">Yeni bir haber oluşturun</p>
+      <div className="mb-6 sm:mb-8">
+        <h1 className="mb-2 text-2xl sm:text-3xl font-bold text-[var(--color-fg)]">Yeni Haber</h1>
+        <p className="text-sm sm:text-base text-[var(--color-fg)]/70">Yeni bir haber oluşturun</p>
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Haber Bilgileri</CardTitle>
+        <CardHeader className="pb-4 sm:pb-6">
+          <CardTitle className="text-lg sm:text-xl">Haber Bilgileri</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-0">
           <PostForm mode="create" />
         </CardContent>
       </Card>

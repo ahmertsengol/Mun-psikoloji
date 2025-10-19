@@ -72,33 +72,33 @@ export default async function AdminDashboard() {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 lg:space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="text-4xl font-bold text-[var(--color-fg)] mb-3">Dashboard</h1>
-        <p className="text-lg text-[var(--color-fg)]/70">
+      <div className="text-center sm:text-left">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[var(--color-fg)] mb-2 lg:mb-3">Dashboard</h1>
+        <p className="text-base lg:text-lg text-[var(--color-fg)]/70">
           Munzur Psikoloji Kulübü yönetim paneline hoş geldiniz
         </p>
       </div>
 
       {/* Statistics */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => {
           const IconComponent = stat.icon;
           return (
             <Link key={stat.label} href={stat.href}>
-              <Card className="group transition-all hover:shadow-[var(--shadow-soft-md)] hover:border-[var(--color-accent)]/50 cursor-pointer">
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={`p-3 rounded-xl ${stat.bgColor}`}>
-                      <IconComponent className={`w-6 h-6 ${stat.color}`} />
+              <Card className="group transition-all hover:shadow-[var(--shadow-soft-md)] hover:border-[var(--color-accent)]/50 cursor-pointer touch-manipulation active:scale-95">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="flex items-start justify-between mb-3 lg:mb-4">
+                    <div className={`p-2.5 lg:p-3 rounded-xl ${stat.bgColor}`}>
+                      <IconComponent className={`w-5 h-5 lg:w-6 lg:h-6 ${stat.color}`} />
                     </div>
-                    <ArrowRight className="w-5 h-5 text-[var(--color-fg)]/40 group-hover:text-[var(--color-accent)] transition-colors" />
+                    <ArrowRight className="w-4 h-4 lg:w-5 lg:h-5 text-[var(--color-fg)]/40 group-hover:text-[var(--color-accent)] transition-colors" />
                   </div>
-                  <p className="text-sm font-medium text-[var(--color-fg)]/70 mb-2">
+                  <p className="text-xs sm:text-sm font-medium text-[var(--color-fg)]/70 mb-1 lg:mb-2">
                     {stat.label}
                   </p>
-                  <p className="text-3xl font-bold text-[var(--color-fg)]">
+                  <p className="text-2xl sm:text-3xl font-bold text-[var(--color-fg)]">
                     {stat.value}
                   </p>
                 </CardContent>
@@ -109,46 +109,46 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Recent Posts and Quick Actions */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
         {/* Recent Posts */}
         <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <Newspaper className="w-5 h-5 text-[var(--color-accent)]" />
+          <CardHeader className="pb-3 sm:pb-4">
+            <div className="flex items-center justify-between gap-2">
+              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                <Newspaper className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--color-accent)]" />
                 Son Haberler
               </CardTitle>
               <Link href="/admin/posts">
-                <Button variant="ghost" size="sm" className="gap-1">
+                <Button variant="ghost" size="sm" className="gap-1 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3">
                   Tümünü Gör
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
                 </Button>
               </Link>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-0">
             {recentPosts.length > 0 ? (
-              <ul className="space-y-4">
+              <ul className="space-y-3 sm:space-y-4">
                 {recentPosts.map((post: typeof recentPosts[number]) => (
                   <li
                     key={post.id}
-                    className="flex items-start justify-between gap-4 pb-4 border-b border-[var(--color-border)] last:border-0 last:pb-0"
+                    className="flex items-start justify-between gap-3 sm:gap-4 pb-3 sm:pb-4 border-b border-[var(--color-border)] last:border-0 last:pb-0"
                   >
                     <div className="flex-1 min-w-0">
                       <Link
                         href={`/admin/posts/${post.id}`}
-                        className="font-semibold text-[var(--color-fg)] hover:text-[var(--color-accent)] transition-colors line-clamp-2 block mb-1"
+                        className="font-semibold text-sm sm:text-base text-[var(--color-fg)] hover:text-[var(--color-accent)] transition-colors line-clamp-2 block mb-1 touch-manipulation"
                       >
                         {post.title}
                       </Link>
-                      <p className="text-sm text-[var(--color-fg)]/60">
+                      <p className="text-xs sm:text-sm text-[var(--color-fg)]/60">
                         {format(new Date(post.updatedAt), 'dd MMM yyyy', {
                           locale: tr,
                         })}
                       </p>
                     </div>
                     <span
-                      className={`flex-shrink-0 rounded-full px-3 py-1 text-xs font-medium ${
+                      className={`flex-shrink-0 rounded-full px-2 sm:px-3 py-1 text-xs font-medium ${
                         post.status === 'PUBLISHED'
                           ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
                           : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
@@ -160,9 +160,9 @@ export default async function AdminDashboard() {
                 ))}
               </ul>
             ) : (
-              <div className="py-12 text-center">
-                <Newspaper className="w-12 h-12 text-[var(--color-fg)]/20 mx-auto mb-3" />
-                <p className="text-[var(--color-fg)]/60">Henüz haber yok</p>
+              <div className="py-8 sm:py-12 text-center">
+                <Newspaper className="w-10 h-10 sm:w-12 sm:h-12 text-[var(--color-fg)]/20 mx-auto mb-2 sm:mb-3" />
+                <p className="text-sm sm:text-base text-[var(--color-fg)]/60">Henüz haber yok</p>
               </div>
             )}
           </CardContent>
@@ -170,41 +170,41 @@ export default async function AdminDashboard() {
 
         {/* Quick Actions */}
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Plus className="w-5 h-5 text-[var(--color-accent)]" />
+          <CardHeader className="pb-3 sm:pb-4">
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--color-accent)]" />
               Hızlı İşlemler
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
+          <CardContent className="pt-0">
+            <div className="space-y-2 sm:space-y-3">
               <Link href="/admin/announcements/new" className="block">
-                <Button className="w-full justify-start gap-2 text-base h-12">
-                  <Plus className="w-5 h-5" />
+                <Button className="w-full justify-start gap-2 text-sm sm:text-base h-11 sm:h-12 touch-manipulation active:scale-95">
+                  <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
                   Yeni Duyuru Ekle
                 </Button>
               </Link>
               <Link href="/admin/posts/new" className="block">
-                <Button className="w-full justify-start gap-2 text-base h-12">
-                  <Plus className="w-5 h-5" />
+                <Button className="w-full justify-start gap-2 text-sm sm:text-base h-11 sm:h-12 touch-manipulation active:scale-95">
+                  <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
                   Yeni Haber Ekle
                 </Button>
               </Link>
               <Link href="/admin/events/new" className="block">
-                <Button className="w-full justify-start gap-2 text-base h-12">
-                  <Plus className="w-5 h-5" />
+                <Button className="w-full justify-start gap-2 text-sm sm:text-base h-11 sm:h-12 touch-manipulation active:scale-95">
+                  <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
                   Yeni Etkinlik Ekle
                 </Button>
               </Link>
               <Link href="/admin/media" className="block">
-                <Button variant="secondary" className="w-full justify-start gap-2 text-base h-12">
-                  <ImageIcon className="w-5 h-5" />
+                <Button variant="secondary" className="w-full justify-start gap-2 text-sm sm:text-base h-11 sm:h-12 touch-manipulation active:scale-95">
+                  <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                   Medya Yönetimi
                 </Button>
               </Link>
               <Link href="/" className="block">
-                <Button variant="ghost" className="w-full justify-start gap-2 text-base h-12">
-                  <Home className="w-5 h-5" />
+                <Button variant="ghost" className="w-full justify-start gap-2 text-sm sm:text-base h-11 sm:h-12 touch-manipulation active:scale-95">
+                  <Home className="w-4 h-4 sm:w-5 sm:h-5" />
                   Siteyi Görüntüle
                 </Button>
               </Link>
