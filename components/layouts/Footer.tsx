@@ -87,15 +87,6 @@ export function Footer() {
                 <MapPin className="h-4 w-4 text-[var(--color-accent)] mt-0.5" />
                 <span>Munzur Üniversitesi<br />Tunceli, Türkiye</span>
               </p>
-              <p className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-[var(--color-accent)]" />
-                <a
-                  href="mailto:info@munzurpsikoloji.com"
-                  className="hover:text-[var(--color-accent)] transition-colors"
-                >
-                  info@munzurpsikoloji.com
-                </a>
-              </p>
             </div>
           </div>
         </div>

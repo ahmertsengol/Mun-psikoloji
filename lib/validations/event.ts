@@ -10,7 +10,7 @@ export const eventFormSchema = z.object({
   startsAt: z.string().min(1, 'Başlangıç tarihi gereklidir'),
   endsAt: z.string().optional(),
   location: z.string().max(200, 'Konum çok uzun').optional(),
-  coverImage: z.string().url('Geçerli bir URL olmalı').optional().or(z.literal('')),
+  coverImage: z.string().url('Geçerli bir URL olmalı').optional().or(z.literal('')).nullable(),
   status: z.enum(['DRAFT', 'PUBLISHED']),
 });
 

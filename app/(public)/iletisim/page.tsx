@@ -103,18 +103,6 @@ export default function IletisimPage() {
                   Psikoloji kulübü hakkında daha fazla bilgi almak ve
                   etkinliklerimize katılmak için bize ulaşabilirsiniz.
                 </p>
-                <div>
-                  <p className="font-semibold text-[var(--color-fg)] mb-1 flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-[var(--color-accent)]" />
-                    E-posta:
-                  </p>
-                  <a
-                    href="mailto:info@munzurpsikoloji.com"
-                    className="text-[var(--color-accent)] hover:text-[var(--color-accent2)] hover:underline transition-colors"
-                  >
-                    info@munzurpsikoloji.com
-                  </a>
-                </div>
               </div>
             </CardContent>
           </Card>

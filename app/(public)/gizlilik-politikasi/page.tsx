@@ -35,7 +35,6 @@ export default function GizlilikPolitikasiPage() {
           <h2 className="text-2xl font-semibold mb-4">2. Veri Sorumlusu</h2>
           <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
             <p><strong>Munzur Psikoloji Kulübü</strong></p>
-            <p>E-posta: info@munzurpsikoloji.com</p>
             <p>Adres: Munzur Üniversitesi, Tunceli</p>
           </div>
         </section>
