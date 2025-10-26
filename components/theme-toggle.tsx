@@ -20,8 +20,6 @@ export function ThemeToggle() {
     );
   }
 
-  const currentTheme = theme === "system" ? systemTheme : theme;
-
   return (
     <div
       role="radiogroup"

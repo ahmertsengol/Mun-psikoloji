@@ -22,7 +22,6 @@ export function EventCard({
   slug,
   description,
   startsAt,
-  endsAt,
   location,
   coverImage, // Kapak görseli eklendi
   className,

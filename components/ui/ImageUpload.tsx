@@ -11,8 +11,8 @@ import { Upload, X, Loader2 } from 'lucide-react';
 import { uploadImage, validateImageFile } from '@/lib/utils/storage';
 
 interface ImageUploadProps {
-  value?: string;
-  onChange: (url: string) => void;
+  value?: string | null;
+  onChange: (url: string | null) => void;
   onRemove?: () => void;
   label?: string;
   error?: string;
@@ -61,7 +61,7 @@ export function ImageUpload({
     if (onRemove) {
       onRemove();
     }
-    onChange('');
+    onChange(null);
   };
 
   return (

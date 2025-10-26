@@ -19,7 +19,7 @@ const announcementFormSchema = z.object({
   title: z.string().min(1, 'Başlık zorunludur'),
   content: z.string().min(1, 'İçerik zorunludur'),
   excerpt: z.string().optional(),
-  coverImage: z.string().url('Geçerli bir URL olmalı').optional().or(z.literal('')),
+  coverImage: z.string().url('Geçerli bir URL olmalı').optional().or(z.literal('')).nullable(),
   status: z.enum(['DRAFT', 'PUBLISHED']),
 });
 
@@ -104,7 +104,7 @@ export function AnnouncementForm({ initialData, mode }: AnnouncementFormProps) {
       />
 
       <ImageUpload
-        value={coverImage}
+        value={coverImage || null}
         onChange={(url) => setValue('coverImage', url)}
         onRemove={() => setValue('coverImage', '')}
         label="Kapak Görseli (İsteğe Bağlı)"

@@ -4,7 +4,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Separator } from '@/components/ui/Separator';
-import { MapPin, Mail, Brain, AlertCircle } from 'lucide-react';
+import { MapPin, Brain, AlertCircle } from 'lucide-react';
 
 export const metadata = {
   title: 'İletişim | Munzur Psikoloji Kulübü',

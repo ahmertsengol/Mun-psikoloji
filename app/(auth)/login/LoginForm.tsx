@@ -42,7 +42,7 @@ export function LoginForm() {
         router.push(redirect);
         router.refresh();
       }
-    } catch (err) {
+    } catch {
       setError('Giriş yapılırken bir hata oluştu');
       setIsLoading(false);
     }

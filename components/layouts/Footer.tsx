@@ -3,7 +3,7 @@
  */
 
 import Link from "next/link";
-import { Brain, Mail, MapPin } from "lucide-react";
+import { Brain, MapPin } from "lucide-react";
 
 export function Footer() {
   return (

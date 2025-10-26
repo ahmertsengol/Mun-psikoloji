@@ -96,7 +96,7 @@ export function EventForm({ initialData, mode }: EventFormProps) {
       />
 
       <ImageUpload
-        value={coverImage}
+        value={coverImage || null}
         onChange={(url) => setValue('coverImage', url)}
         onRemove={() => setValue('coverImage', '')}
         label="Kapak Görseli (İsteğe Bağlı)"
