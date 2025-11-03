@@ -1,11 +1,11 @@
-name: CI/CD Deployment
+name: ci-cd
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
-  build-and-push:
+  build-push:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,7 +17,10 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           context: .
+          platforms: linux/amd64
           push: true
           tags: |
             ahmertsengol/mun-psikoloji:latest
             ahmertsengol/mun-psikoloji:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
