@@ -1,4 +1,7 @@
 /**
+// Force dynamic rendering - admin pages require authentication
+export const dynamic = 'force-dynamic';
+
  * Admin Posts List Page
  */
 
