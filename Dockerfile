@@ -28,26 +28,21 @@ RUN npm run build
 FROM node:20-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-# Install OpenSSL for Prisma and curl for health checks
+ENV NEXT_TELEMETRY_DISABLED=1
 RUN apt-get update && apt-get install -y openssl curl && rm -rf /var/lib/apt/lists/*
 
-# Create non-root user for security
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs
+# Sadece prod node_modules
+COPY package*.json ./
+RUN npm ci --omit=dev && npm cache clean --force
 
-# Copy standalone build output (includes only necessary files)
+# Standalone + static + public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
+# Prisma dosyaları (client runtime dosyaları için)
 COPY --from=builder /app/prisma ./prisma
 
-# Set ownership to non-root user
-RUN chown -R nextjs:nodejs /app
-
-USER nextjs
-
+# Varsayılan port ve komut
 ENV PORT=3000
 EXPOSE 3000
-
-# Run migrations and start server
-CMD sh -c "npx prisma migrate deploy && node server.js"
+CMD ["node","server.js"]
