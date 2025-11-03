@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres.grpdehwhgjiadprkannw:Ahmetmert65.@aws-1-eu-central-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=10
+      - DIRECT_URL=postgresql://postgres:Ahmetmert65.@db.grpdehwhgjiadprkannw.supabase.co:5432/postgres
+      - NEXT_PUBLIC_SUPABASE_URL=https://grpdehwhgjiadprkannw.supabase.co
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdycGRlaHdoZ2ppYWRwcmthbm53Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MzU1OTEsImV4cCI6MjA3NjExMTU5MX0.YLWU1LRV4DkPFrSaKjGMdXD3LBsmdQMhzmv90EN4LiU
+      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+    env_file:
+      - .env.production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
