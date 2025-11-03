@@ -6,6 +6,9 @@ import { prisma } from "@/lib/db/prisma";
 import { AnnouncementCard } from "@/components/cards/announcement-card";
 import { Megaphone } from "lucide-react";
 
+// Force dynamic rendering - prevents build-time database access
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: "Duyurular | Munzur Psikoloji Kulübü",
   description: "Kulüp duyuruları ve güncellemeler",

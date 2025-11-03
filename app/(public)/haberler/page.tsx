@@ -9,6 +9,9 @@ import { Separator } from '@/components/ui/Separator';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
 
+// Force dynamic rendering - prevents build-time database access
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Haberler | Munzur Psikoloji Kulübü',
   description: 'Munzur Psikoloji Kulübü haberler ve duyurular.',

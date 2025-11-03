@@ -10,6 +10,9 @@ import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { Calendar, MapPin } from 'lucide-react';
 
+// Force dynamic rendering - prevents build-time database access
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Etkinlikler | Munzur Psikoloji Kulübü',
   description: 'Munzur Psikoloji Kulübü etkinlikleri ve programlar.',

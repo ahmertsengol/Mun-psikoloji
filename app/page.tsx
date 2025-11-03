@@ -11,6 +11,9 @@ import { AnnouncementsList } from "@/components/lists/announcements-list";
 import { NewsList } from "@/components/lists/news-list";
 import { Separator } from "@/components/ui/Separator";
 
+// Force dynamic rendering - prevents build-time database access
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: "Anasayfa | Munzur Psikoloji Kulübü",
   description:

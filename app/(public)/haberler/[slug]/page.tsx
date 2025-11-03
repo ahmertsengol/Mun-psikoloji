@@ -33,6 +33,9 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
+// Force dynamic rendering - prevents build-time database access
+export const dynamic = 'force-dynamic';
+
 export default async function PostPage({ params }: PageProps) {
   const { slug } = await params;
   const post = await prisma.post.findUnique({

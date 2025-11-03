@@ -46,3 +46,6 @@ next-env.d.ts
 prisma/migrations/*
 !prisma/migrations/.gitkeep
 server.md
+DEPLOYMENT_GUIDE.md
+TAILSCALE_DEPLOYMENT.md
+.claude/
